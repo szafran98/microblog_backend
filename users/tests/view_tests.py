@@ -4,7 +4,6 @@ from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 
 
-
 class RegistrationTestCase(APITestCase):
 
     def test_registration(self):
