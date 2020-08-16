@@ -13,6 +13,7 @@ class PostTestCase(APITestCase):
             email='test@mail.com',
             password='pass'
         )
+        Token.objects.create(user=self.user)
         self.client.login(username='test@mail.com', password='pass')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + Token.objects.get(user=self.user).key)
 

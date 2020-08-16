@@ -8,7 +8,7 @@ class Post(models.Model):
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     content = models.TextField(max_length=300)
     date_pub = models.DateTimeField(auto_now_add=True)
-    likes = models.ManyToManyField(to=get_user_model())
+    likes = models.ManyToManyField(to=get_user_model(), related_name='like')
     tags = models.CharField(max_length=100)
 
     class Meta:
@@ -39,3 +39,6 @@ class Comment(models.Model):
     content = models.TextField(max_length=300)
     to_post = models.ForeignKey(Post, on_delete=models.CASCADE)
     date_pub = models.DateTimeField(auto_now_add=True)
+
+    def date_pub_timestamp(self):
+        return self.date_pub.timestamp()
