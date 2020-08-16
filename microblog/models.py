@@ -11,6 +11,9 @@ class Post(models.Model):
     likes = models.ManyToManyField(to=get_user_model())
     tags = models.CharField(max_length=100)
 
+    class Meta:
+        ordering = ['-date_pub']
+
     @classmethod
     def get_posts_by_user(cls, author):
         return cls.objects.filter(author=author)
@@ -26,6 +29,9 @@ class Post(models.Model):
     def get_specific_post(self, post_id):
         if self.id == post_id:
             return self, Comment.objects.filter(to_post=self)
+
+    def date_pub_timestamp(self):
+        return self.date_pub.timestamp()
 
 
 class Comment(models.Model):
