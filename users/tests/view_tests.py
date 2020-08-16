@@ -1,4 +1,7 @@
+import json
+
 from django.contrib.auth import get_user_model
+from users.models import CustomUser
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
@@ -22,19 +25,19 @@ class RegistrationTestCase(APITestCase):
 class LoginTestCase(APITestCase):
 
     def setUp(self) -> None:
-        self.user = get_user_model().objects.create(
+        self.user = CustomUser.objects.create_user(
             username='testuser',
             email='test@mail.com',
             password='pass'
         )
 
     def test_user_login(self):
-        data = {'email': 'test@mail.com', 'password': 'pass'}
-        response = self.client.post('/auth/', data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = {'username': 'test@mail.com', 'password': 'pass'}
+        response = self.client.post('/api/auth/', data)
         self.assertEqual(response.data['token'], Token.objects.get(user=self.user).key)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_user_login_no_user(self):
-        data = {'email': 'bad@mail.com', 'password': 'pas'}
-        response = self.client.post('/auth/', data)
+        data = {'username': 'bad@mail.com', 'password': 'pas'}
+        response = self.client.post('/api/auth/', data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

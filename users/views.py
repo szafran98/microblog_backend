@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from .models import CustomUser
@@ -27,5 +27,5 @@ class CustomAuthToken(ObtainAuthToken):
             return Response({
                 'token': token.key
             })
-        except AttributeError:
+        except ValidationError:
             raise AuthenticationFailed()
