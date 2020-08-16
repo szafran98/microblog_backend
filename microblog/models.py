@@ -11,6 +11,22 @@ class Post(models.Model):
     likes = models.ManyToManyField(to=get_user_model())
     tags = models.CharField(max_length=100)
 
+    @classmethod
+    def get_posts_by_user(cls, author):
+        return cls.objects.filter(author=author)
+
+    @classmethod
+    def get_posts_by_tag(cls, tag):
+        return cls.objects.filter(tags__contains=tag)
+
+    @classmethod
+    def get_sorted_posts(cls, order_modifier='-'):
+        return cls.objects.order_by(f'{order_modifier}date_pub')
+
+    def get_specific_post(self, post_id):
+        if self.id == post_id:
+            return self, Comment.objects.filter(to_post=self)
+
 
 class Comment(models.Model):
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
