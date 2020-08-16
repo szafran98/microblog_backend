@@ -4,12 +4,17 @@ from django.contrib.auth import get_user_model
 
 # Create your models here.
 
+
+class Like(models.Model):
+    who_likes = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    to_post = models.ForeignKey('Post', on_delete=models.CASCADE)
+
 class Post(models.Model):
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     content = models.TextField(max_length=300)
     date_pub = models.DateTimeField(auto_now_add=True)
-    liked = models.ManyToManyField(to=get_user_model(), related_name='PostLikeToggle')
-    tags = models.CharField(max_length=100)
+    #liked = models.ForeignKey('Like', on_delete=models.CASCADE, null=True)
+    tags = models.CharField(max_length=100, default='', null=True)
 
     class Meta:
         ordering = ['-date_pub']
@@ -30,12 +35,17 @@ class Post(models.Model):
         if self.id == post_id:
             return self, Comment.objects.filter(to_post=self)
 
+    @property
+    def post_author(self):
+        return self.author.username
+
+    @property
     def date_pub_timestamp(self):
         return self.date_pub.timestamp()
 
     @property
     def likes_count(self):
-        return self.liked.count()
+        return Like.objects.filter(to_post=self)
 
 
 class Comment(models.Model):
@@ -51,3 +61,5 @@ class Comment(models.Model):
     @property
     def likes_count(self):
         return self.liked.count()
+
+

@@ -13,19 +13,19 @@ class PostTestCase(APITestCase):
             email='test@mail.com',
             password='pass'
         )
-        Token.objects.create(user=self.user)
+        token = Token.objects.create(user=self.user)
         self.client.login(username='test@mail.com', password='pass')
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + Token.objects.get(user=self.user).key)
+        self.client.credentials(HTTP_TOKEN='Token ' + token.key)
 
     def test_post_add(self):
         data = {'content': 'test content'}
-        response = self.client.post('/api/post/', data)
+        response = self.client.post('/api/posts/', data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Post.objects.first().content, 'test content')
 
     def test_post_add_no_data(self):
         data = {}
-        response = self.client.post('/api/post/', data)
+        response = self.client.post('/api/posts/', data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Post.objects.count(), 0)
 

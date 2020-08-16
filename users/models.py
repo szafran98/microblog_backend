@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
+from rest_framework.authtoken.models import Token
 
 from .managers import CustomUserManager
 
@@ -18,3 +19,7 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return f'{self.email}, {self.username}'
+
+    @staticmethod
+    def get_user_by_token(request):
+        return Token.objects.get(key=request.META['HTTP_TOKEN']).user
