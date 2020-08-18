@@ -43,6 +43,18 @@ class Post(models.Model):
         }
 
     @property
+    def post_comments(self):
+        comments = []
+        for comment in Comment.objects.filter(to_post=self):
+            comments.append({
+                'author': comment.author.username,
+                'content': comment.content,
+                'date_pub': comment.date_pub_timestamp,
+                'likes_count': comment.likes_count
+            })
+        return comments
+
+    @property
     def date_pub_timestamp(self):
         return self.date_pub.timestamp()
 
@@ -58,6 +70,7 @@ class Comment(models.Model):
     date_pub = models.DateTimeField(auto_now_add=True)
     liked = models.ManyToManyField(to=get_user_model(), related_name='CommentLikeToggle')
 
+    @property
     def date_pub_timestamp(self):
         return self.date_pub.timestamp()
 
