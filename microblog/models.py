@@ -37,7 +37,10 @@ class Post(models.Model):
 
     @property
     def post_author(self):
-        return self.author.username
+        return {
+            'username': self.author.username,
+            'email': self.author.email
+        }
 
     @property
     def date_pub_timestamp(self):
