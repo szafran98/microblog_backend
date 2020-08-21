@@ -20,7 +20,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['url', 'id', 'content', 'author', 'author_pk', 'date_pub_timestamp', 'post_comments']
+        fields = ['url', 'id', 'content', 'author', 'author_pk', 'date_pub_timestamp', 'post_comments', 'likes_count']
 
     def get_fields(self):
         fields = super(PostSerializer, self).get_fields()
@@ -37,4 +37,4 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['url', 'id', 'author', 'author_pk', 'content', 'date_pub_timestamp', 'to_post']
+        fields = ['url', 'id', 'author', 'author_pk', 'content', 'date_pub_timestamp', 'to_post', 'likes_count']

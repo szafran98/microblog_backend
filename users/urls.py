@@ -4,7 +4,7 @@ from .views import UserViewSet, CustomAuthToken
 
 
 router = DefaultRouter()
-router.register('users', UserViewSet)
+router.register('', UserViewSet)
 
 
 urlpatterns = [
