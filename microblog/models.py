@@ -9,11 +9,12 @@ class Like(models.Model):
     who_likes = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     to_post = models.ForeignKey('Post', on_delete=models.CASCADE)
 
+
 class Post(models.Model):
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     content = models.TextField(max_length=300)
     date_pub = models.DateTimeField(auto_now_add=True)
-    #liked = models.ForeignKey('Like', on_delete=models.CASCADE, null=True)
+    # liked = models.ForeignKey('Like', on_delete=models.CASCADE, null=True)
     tags = models.CharField(max_length=100, default='', null=True)
 
     class Meta:
@@ -42,17 +43,11 @@ class Post(models.Model):
             'email': self.author.email
         }
 
+
     @property
     def post_comments(self):
-        comments = []
-        for comment in Comment.objects.filter(to_post=self):
-            comments.append({
-                'author': comment.author.username,
-                'content': comment.content,
-                'date_pub': comment.date_pub_timestamp,
-                'likes_count': comment.likes_count
-            })
-        return comments
+        return Comment.objects.filter(to_post=self)
+
 
     @property
     def date_pub_timestamp(self):
@@ -77,5 +72,3 @@ class Comment(models.Model):
     @property
     def likes_count(self):
         return self.liked.count()
-
-
