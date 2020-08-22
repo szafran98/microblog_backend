@@ -146,7 +146,9 @@ SIMPLE_JWT = {
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': 'http://localhost:8080/#//activate/{uid}/{token}',
+    'ACTIVATION_URL': 'activate/{uid}/{token}',
+    'DOMAIN': 'localhost:8080/#',
+    'PROTOCOL': 'http',
     'SEND_ACTIVATION_EMAIL': True,
     'LOGIN_FIELD': 'email', # DO SPRAWDZENIE Z CUSTOM USEREM
     'TOKEN_MODEL': None,
@@ -158,3 +160,4 @@ EMAIL_HOST_USER = 'szafran1308@gmail.com'
 EMAIL_HOST_PASSWORD = 'Kogut100@'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+SITE_NAME = 'Mikroblog'
