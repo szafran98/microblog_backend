@@ -146,9 +146,15 @@ SIMPLE_JWT = {
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': '#/activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': False,
+    'ACTIVATION_URL': 'http://localhost:8080/#//activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
     'LOGIN_FIELD': 'email', # DO SPRAWDZENIE Z CUSTOM USEREM
     'TOKEN_MODEL': None,
-
 }
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'szafran1308@gmail.com'
+EMAIL_HOST_PASSWORD = 'Kogut100@'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
