@@ -4,7 +4,7 @@ from rest_framework import viewsets, status
 from rest_framework.authtoken.models import Token
 from rest_framework.fields import CurrentUserDefault
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 
 from users.models import CustomUser
 from .models import Post, Comment
@@ -14,19 +14,19 @@ from .serializers import PostSerializer, CommentSerializer
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [AllowAny,]
+    permission_classes = [IsAuthenticatedOrReadOnly,]
 
     """
     def create(self, request, *args, **kwargs):
         #print(self.get_serializer_context()['request'].user)
-        print(request.data.get('author'))
+        print(request.data, request.user.id)
         try:
 
 
 
             new_dict = request.data.copy()
             #user = CustomUser.get_user_by_token(request)
-            #new_dict['author'] = user.id
+            new_dict['author_pk'] = request.user.id
             serializer = self.serializer_class(data=request.data, context={'request': request})
             serializer.is_valid(raise_exception=True)
             print(serializer)
@@ -57,3 +57,4 @@ class PostViewSet(viewsets.ModelViewSet):
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly,]
