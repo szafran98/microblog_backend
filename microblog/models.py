@@ -15,7 +15,7 @@ class Post(models.Model):
     content = models.TextField(max_length=300)
     date_pub = models.DateTimeField(auto_now_add=True)
     liked = models.ManyToManyField(to=get_user_model(), related_name='PostLikeToggle')
-    tags = models.CharField(max_length=100, default='', null=True)
+    #tags = models.CharField(max_length=100, default='', null=True)
 
     class Meta:
         ordering = ['-date_pub']
@@ -26,7 +26,7 @@ class Post(models.Model):
 
     @classmethod
     def get_posts_by_tag(cls, tag):
-        return cls.objects.filter(tags__contains=tag)
+        return cls.objects.filter(content__contains=tag)
 
     @classmethod
     def get_sorted_posts(cls, order_modifier='-'):
@@ -56,6 +56,17 @@ class Post(models.Model):
     @property
     def likes_count(self):
         return self.liked.count()
+
+    def is_liked_by_user(self, user):
+        return self.liked.filter(id=user.id).exists()
+
+    @property
+    def tags(self):
+        tags = []
+        for word in self.content.split():
+            if '#' in word:
+                tags.append(word)
+        return tags
 
 
 class Comment(models.Model):

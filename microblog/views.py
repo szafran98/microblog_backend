@@ -5,6 +5,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.fields import CurrentUserDefault
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.decorators import action
 
 from users.models import CustomUser
 from .models import Post, Comment
@@ -14,7 +15,29 @@ from .serializers import PostSerializer, CommentSerializer
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly,]
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
+
+    def list(self, request, *args, **kwargs):
+        serializer = super().list(request, *args, **kwargs)
+
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['get'])
+    def like_post(self, request, pk=None):
+        liked_post = Post.objects.get(id=pk)
+        if liked_post.liked.filter(id=request.user.id).exists():
+            liked_post.liked.remove(request.user)
+            liked_post.save()
+        else:
+            liked_post.liked.add(request.user)
+            liked_post.save()
+
+
+        # serializer = self.serializer_class(data=dict(liked_post))
+        # serializer.is_valid(raise_exception=True)
+        # return Response(PostSerializer(liked_post, context={'request': request}).data, status=status.HTTP_200_OK)
+        serializer = self.get_serializer(liked_post)
+        return Response(serializer.data)
 
     """
     def create(self, request, *args, **kwargs):
@@ -54,7 +77,8 @@ class PostViewSet(viewsets.ModelViewSet):
             raise Exception
         """
 
+
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly,]
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
