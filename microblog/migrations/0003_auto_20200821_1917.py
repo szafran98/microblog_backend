@@ -8,16 +8,18 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('microblog', '0002_auto_20200818_1917'),
+        ("microblog", "0002_auto_20200818_1917"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='post',
-            name='liked',
-            field=models.ManyToManyField(related_name='PostLikeToggle', to=settings.AUTH_USER_MODEL),
+            model_name="post",
+            name="liked",
+            field=models.ManyToManyField(
+                related_name="PostLikeToggle", to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.DeleteModel(
-            name='Like',
+            name="Like",
         ),
     ]

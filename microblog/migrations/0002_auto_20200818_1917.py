@@ -10,39 +10,51 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('microblog', '0001_initial'),
+        ("microblog", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='post',
-            name='author',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="post",
+            name="author",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AddField(
-            model_name='like',
-            name='to_post',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='microblog.post'),
+            model_name="like",
+            name="to_post",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="microblog.post"
+            ),
         ),
         migrations.AddField(
-            model_name='like',
-            name='who_likes',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="like",
+            name="who_likes",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AddField(
-            model_name='comment',
-            name='author',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="comment",
+            name="author",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AddField(
-            model_name='comment',
-            name='liked',
-            field=models.ManyToManyField(related_name='CommentLikeToggle', to=settings.AUTH_USER_MODEL),
+            model_name="comment",
+            name="liked",
+            field=models.ManyToManyField(
+                related_name="CommentLikeToggle", to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AddField(
-            model_name='comment',
-            name='to_post',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='microblog.post'),
+            model_name="comment",
+            name="to_post",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="microblog.post"
+            ),
         ),
     ]
