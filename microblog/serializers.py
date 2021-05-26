@@ -6,6 +6,14 @@ from users.serializers import CustomUserSerializer
 from .models import Post, Comment
 
 
+# class ReadingListItemSerializer(serializers.HyperlinkedModelSerializer):
+#     post_to_read_id = serializers.IntegerField()
+#
+#     class Meta:
+#         model = Post
+#         fields = ["post_to_read_id"]
+
+
 class PostSerializer(serializers.HyperlinkedModelSerializer):
     author = CustomUserSerializer(read_only=True)
     # author_pk = serializers.PrimaryKeyRelatedField(

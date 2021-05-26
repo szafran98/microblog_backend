@@ -12,6 +12,7 @@ from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly,
 )
 from rest_framework.decorators import action
+from rest_framework.serializers import BaseSerializer, Serializer
 
 from users.models import CustomUser
 from users.serializers import CustomUserSerializer
@@ -51,6 +52,11 @@ class PostViewSet(viewsets.ModelViewSet):
         IsAuthenticatedOrReadOnly,
     ]
 
+    def get_serializer_class(self):
+        if self.action == "add_to_reading_list":
+            return Serializer
+        return super().get_serializer_class()
+
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
 
@@ -72,8 +78,19 @@ class PostViewSet(viewsets.ModelViewSet):
         liked_post = Post.objects.get(id=pk)
         return like(request, liked_post)
 
-    @action(detail=True, methods=["get"])
+    @action(detail=True, methods=["post"])
     def add_to_reading_list(self, request, pk=None):
+        # print(request.data.get("post_to_read_id"))
+        # post_added_to_reading_list = Post.objects.get(
+        #     id=request.data.get("post_to_read_id")
+        # )
+        # post_added_to_reading_list.to_read.add(request.user)
+        # return Response(
+        #     PostSerializer(
+        #         post_added_to_reading_list, context={"request": request}
+        #     ).data,
+        #     status=status.HTTP_200_OK,
+        # )
         saved_post = Post.objects.get(id=pk)
         saved_post.to_read.add(request.user)
         return Response(
