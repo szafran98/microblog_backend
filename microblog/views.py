@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets, status
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import NotAuthenticated
@@ -88,6 +89,19 @@ class PostViewSet(viewsets.ModelViewSet):
             PostSerializer(posts, context={"request": request}, many=True).data,
             status=status.HTTP_200_OK,
         )
+
+    @action(
+        detail=False,
+        methods=["delete"],
+        url_path="user_reading_list/(?P<pk>\d+)",
+    )
+    def remove_article_to_read(self, request, pk=None):
+        try:
+            post_to_read = Post.objects.get(to_read=self.request.user, id=pk)
+            post_to_read.to_read.remove(request.user)
+            return Response(status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @action(detail=False, methods=["get"])
     def most_popular_tags(self, request):

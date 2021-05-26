@@ -98,12 +98,3 @@ class Comment(models.Model):
 
     def is_liked_by_user(self, user):
         return self.liked.filter(id=user.id).exists()
-
-
-class ReadingList(models.Model):
-    owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    to_read = models.ForeignKey(to=Post, on_delete=models.CASCADE)
-
-    @classmethod
-    def saved_posts(cls, user):
-        return cls.objects.filter(owner=user).to_read

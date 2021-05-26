@@ -3,13 +3,7 @@ from rest_framework.fields import CurrentUserDefault
 
 from users.models import CustomUser
 from users.serializers import CustomUserSerializer
-from .models import Post, Comment, ReadingList
-
-
-class ReadingListSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = ReadingList
-        fields = ["url", "id", "owner", "to_read"]
+from .models import Post, Comment
 
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
